@@ -3,7 +3,12 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 const inpT = document.querySelector('#datetime-picker');
-// console.log(inpT);
+const btN = document.querySelector("button[data-start]")
+const spnDay = document.querySelector("span[data-days]")
+const spnHours = document.querySelector("span[data-hours]")
+const spnMinutes = document.querySelector("span[data-minutes]")
+const spnSeconds = document.querySelector("span[data-seconds]")
+
 let userSelectedDate;
 const options = {
   enableTime: true,
@@ -13,14 +18,19 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
     userSelectedDate = selectedDates[0];
-    console.log(userSelectedDate);
+    if (userSelectedDate < Date.now()) {
+      alert('Please choose a date in the future');
+    }
   },
 };
-
 flatpickr(inpT, options);
+btN.addEventListener("click", handleClick)
 
-// inpT.addEventListener('input', handleInput);
-
-// function handleInput(event) {
-//   // console.log(event.target.value);
-// }
+function handleClick() {
+    console.log("tot");
+    console.log(spnDay.textContent);
+    console.log(spnHours.textContent);
+    console.log(spnMinutes.textContent);
+    console.log(spnSeconds.textContent);
+    
+}
