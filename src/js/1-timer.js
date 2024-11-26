@@ -21,19 +21,19 @@ function convertMs(ms) {
   // Remaining days
   const days = Math.floor(ms / day);
   // Remaining hours
-  const hours = pad(Math.floor((ms % day) / hour));
+  const hours = Math.floor((ms % day) / hour);
   // Remaining minutes
-  const minutes = pad(Math.floor(((ms % day) % hour) / minute));
+  const minutes = Math.floor(((ms % day) % hour) / minute);
   // Remaining seconds
-  const seconds = pad(Math.floor((((ms % day) % hour) % minute) / second));
+  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
 }
 
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
+console.log(convertMs(Date.now())); // {days: 0, hours: 0, minutes: 0, seconds: 2}
 console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-
+btN.disabled = true;
 let userSelectedDate;
 const options = {
   enableTime: true,
@@ -43,23 +43,82 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
     userSelectedDate = selectedDates[0];
-    if (userSelectedDate < Date.now()) {
+    if (userSelectedDate <= Date.now()) {
+      btN.disabled = true;
       iziToast.show({
         color: 'red',
         position: 'topRight',
         message: 'Please choose a date in the future',
       });
+    } else {
+      btN.disabled = false;
     }
   },
 };
 flatpickr(inpT, options);
+
+let isActive = false;
+let intervalId = null;
+
+btN.addEventListener('click', start);
+
+function start() {
+  console.log(userSelectedDate);
+//   console.log(Date.now());
+
+  btN.disabled = true;
+  inpT.disabled = true;
+  if (isActive) {
+    return;
+  }
+
+  //   const starTime = Date.now();
+
+  isActive = true;
+  intervalId = setInterval(() => {
+    const currentTime = userSelectedDate;
+    const deltaTime = currentTime - Date.now();
+    const time = convertMs(deltaTime);
+    // console.log(time);
+    console.log(JSON.stringify(deltaTime));
+    console.log(String(0));
+   
+    if (JSON.stringify(deltaTime) !== String(0)) {
+        stop();
+        alert("ok")
+      }
+    
+
+
+    onTick(time);
+    // console.log(time);
+  }, 1000);
+}
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
+function onTick({ days, hours, minutes, seconds }) {
+  spnDay.textContent = `${addLeadingZero(days)}`;
+  spnHours.textContent = `${addLeadingZero(hours)}`;
+  spnMinutes.textContent = `${addLeadingZero(minutes)}`;
+  spnSeconds.textContent = `${addLeadingZero(seconds)}`;
+}
+
+function stop() {
+  clearInterval(intervalId);
+  isActive = false;
+  btN.disabled = false;
+  inpT.disabled = false;
+}
+
 // btN.addEventListener('click', handleClick);
 
 // function handleClick(event) {
-  // console.log(spnDay.textContent);
-  // console.log(spnHours.textContent);
-  // console.log(spnMinutes.textContent);
-  // console.log(spnSeconds.textContent);
+// console.log(spnDay.textContent);
+// console.log(spnHours.textContent);
+// console.log(spnMinutes.textContent);
+// console.log(spnSeconds.textContent);
 // }
 // class Timer {
 //   constructor({ onTick }) {
@@ -106,44 +165,3 @@ flatpickr(inpT, options);
 //   spnSeconds.textContent = `${seconds}`;
 // }
 // // updateClockFase()
-
-
-
-
-
-
-let isActive = false;
-let intervalId = null;
-btN.addEventListener('click', start);
-
-
-function start() {
-    if (isActive) {
-      return;
-    }
-
-    const starTime = Date.now();
-    isActive = true;
-    intervalId = setInterval(() => {
-      const currentTime = Date.now();
-      const deltaTime = currentTime - starTime;
-      const time = convertMs(deltaTime);
-
-      onTick(time);
-    }, 1000);
-  }
-
-  function pad(value) {
-    return String(value).padStart(2, "0")
-  }
-  function onTick({ days, hours, minutes, seconds }) {
-    spnDay.textContent = `${days}`;
-    spnHours.textContent = `${hours}`;
-    spnMinutes.textContent = `${minutes}`;
-    spnSeconds.textContent = `${seconds}`;
-  }
-  
-  function stop() {
-    clearInterval(intervalId)
-    isActive = false;
-  }
