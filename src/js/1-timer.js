@@ -33,7 +33,7 @@ function convertMs(ms) {
 btN.disabled = true;
 let userSelectedDate;
 const options = {
-    enableTime: true,
+  enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
@@ -43,14 +43,14 @@ const options = {
     if (userSelectedDate <= Date.now()) {
       btN.disabled = true;
       iziToast.show({
-          color: 'red',
-          position: 'topRight',
-          message: 'Please choose a date in the future',
-        });
+        color: 'red',
+        position: 'topRight',
+        message: 'Please choose a date in the future',
+      });
     } else {
-        btN.disabled = false;
+      btN.disabled = false;
     }
-},
+  },
 };
 flatpickr(inpT, options);
 
@@ -62,7 +62,6 @@ const str = JSON.stringify(obj);
 btN.addEventListener('click', start);
 
 function start() {
-
   btN.disabled = true;
   inpT.disabled = true;
   if (isActive) {
@@ -104,3 +103,4 @@ function stop() {
     overlayColor: 'rgba(30, 236, 53 0.1)',
   });
 }
+// console.log(Date.now());
