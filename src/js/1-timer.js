@@ -30,13 +30,10 @@ function convertMs(ms) {
   return { days, hours, minutes, seconds };
 }
 
-console.log(convertMs(Date.now())); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
 btN.disabled = true;
 let userSelectedDate;
 const options = {
-  enableTime: true,
+    enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
@@ -46,25 +43,25 @@ const options = {
     if (userSelectedDate <= Date.now()) {
       btN.disabled = true;
       iziToast.show({
-        color: 'red',
-        position: 'topRight',
-        message: 'Please choose a date in the future',
-      });
+          color: 'red',
+          position: 'topRight',
+          message: 'Please choose a date in the future',
+        });
     } else {
-      btN.disabled = false;
+        btN.disabled = false;
     }
-  },
+},
 };
 flatpickr(inpT, options);
 
 let isActive = false;
 let intervalId = null;
+const obj = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+const str = JSON.stringify(obj);
 
 btN.addEventListener('click', start);
 
 function start() {
-  console.log(userSelectedDate);
-//   console.log(Date.now());
 
   btN.disabled = true;
   inpT.disabled = true;
@@ -72,26 +69,17 @@ function start() {
     return;
   }
 
-  //   const starTime = Date.now();
-
   isActive = true;
   intervalId = setInterval(() => {
     const currentTime = userSelectedDate;
     const deltaTime = currentTime - Date.now();
     const time = convertMs(deltaTime);
-    // console.log(time);
-    console.log(JSON.stringify(deltaTime));
-    console.log(String(0));
-   
-    if (JSON.stringify(deltaTime) !== String(0)) {
-        stop();
-        alert("ok")
-      }
-    
 
+    if (JSON.stringify(convertMs(deltaTime)) === str) {
+      stop();
+    }
 
     onTick(time);
-    // console.log(time);
   }, 1000);
 }
 
@@ -108,60 +96,11 @@ function onTick({ days, hours, minutes, seconds }) {
 function stop() {
   clearInterval(intervalId);
   isActive = false;
-  btN.disabled = false;
   inpT.disabled = false;
+  iziToast.show({
+    color: 'green',
+    position: 'center',
+    message: 'Finish',
+    overlayColor: 'rgba(30, 236, 53 0.1)',
+  });
 }
-
-// btN.addEventListener('click', handleClick);
-
-// function handleClick(event) {
-// console.log(spnDay.textContent);
-// console.log(spnHours.textContent);
-// console.log(spnMinutes.textContent);
-// console.log(spnSeconds.textContent);
-// }
-// class Timer {
-//   constructor({ onTick }) {
-//     this.isActive = false;
-//     this.onTick = onTick;
-//     this.intervalId = null;
-//   }
-
-//    start() {
-//     if (this.isActive) {
-//       return;
-//     }
-
-//     const starTime = Date.now();
-//     this.isActive = true;
-//     this.intervalId = setInterval(() => {
-//       const currentTime = Date.now();
-//       const deltaTime = currentTime - starTime;
-//       const time = convertMs(deltaTime);
-
-//       this.onTick(time);
-//     }, 1000);
-//   }
-
-//   stop() {
-//     clearInterval(this.intervalId)
-//     this.isActive = false;
-//   }
-
-//   pad(value){
-//     return String(value).padStart(2, "0")
-//   }
-// }
-// const timer = new Timer({
-//   onTick: updateClockFase,
-// });
-
-// btN.addEventListener('click', timer.start.bind(timer));
-
-// function updateClockFase({ days, hours, minutes, seconds }) {
-//   spnDay.textContent = `${days}`;
-//   spnHours.textContent = `${hours}`;
-//   spnMinutes.textContent = `${minutes}`;
-//   spnSeconds.textContent = `${seconds}`;
-// }
-// // updateClockFase()
