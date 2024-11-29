@@ -1,16 +1,8 @@
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
-const btN = document.querySelector('button');
-// console.log(btN);
 const forM = document.querySelector('.form');
 let delay;
-const inpT = document.querySelector('[name=delay]');
-
-const inpTful = document.querySelector('[value=fulfilled]');
-
-const inpTrej = document.querySelector('[value=rejected]');
-
 forM.addEventListener('submit', handleSubmit);
 function handleSubmit(event) {
   let tot = event.currentTarget.elements.state.value === 'fulfilled';
@@ -34,8 +26,6 @@ function handleSubmit(event) {
         position: 'center',
         message: value,
       });
-      //   console.log(inpTful.value);
-      //   console.log(isActive);
     })
     .catch(error => {
       iziToast.show({
@@ -44,12 +34,4 @@ function handleSubmit(event) {
         message: error,
       });
     });
-}
-
-// console.log(inpTful.checked);
-
-btN.addEventListener('click', foo);
-function foo() {
-  // console.log("or");
-  //   console.log(inpTful.value);
 }

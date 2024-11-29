@@ -103,4 +103,3 @@ function stop() {
     overlayColor: 'rgba(30, 236, 53 0.1)',
   });
 }
-// console.log(Date.now());
