@@ -2,9 +2,9 @@ import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
 const forM = document.querySelector('.form');
-let delay;
 forM.addEventListener('submit', handleSubmit);
 function handleSubmit(event) {
+  let delay;
   let tot = event.currentTarget.elements.state.value === 'fulfilled';
   delay = event.currentTarget.delay.value;
 
